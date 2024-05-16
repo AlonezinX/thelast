@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - The Last Lion</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .personagem-card {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .personagem-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .personagem-card img {
+            max-width: 100px;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .personagem-card .info {
+            flex-grow: 1;
+        }
+
+        .personagem-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .personagem-card p {
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .personagem-card .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .personagem-card .button {
+            background-color: #ffd700;
+            border: none;
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .personagem-card .button:hover {
+            background-color: #f5c400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Administração - The Last Lion</h1>
+        <div id="personagens-container"></div>
+    </div>
+
+    <script>
+        fetch('/listar-volumes')
+            .then(response => response.json())
+            .then(data => {
+                const personagensContainer = document.getElementById('personagens-container');
+                
+                data.forEach(personagem => {
+                    const card = document.createElement('div');
+                    card.classList.add('personagem-card');
+                    card.innerHTML = `
+                        <img src="${personagem.imagem}" alt="${personagem.titulo}">
+                        <div class="info">
+                            <h3>${personagem.titulo}</h3>
+                            <p>${personagem.descricao}</p>
+                        </div>
+                        <div class="buttons">
+                            <a href="/editar-personagem?nomeAntigo=${personagem.titulo}&nome=${personagem.titulo}&descricao=${personagem.titulo}&imagem=${personagem.imagem}" class="button">Editar</a>
+                            <button onclick="deletarPersonagem('${personagem.titulo}')" class="button">Deletar</button>
+                        </div>`;
+                    personagensContainer.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao obter dados dos personagens:', error);
+            });
+
+        function deletarPersonagem(nome) {
+            const confirmacao = confirm(`Tem certeza que deseja excluir o personagem: ${nome}?`);
+
+            if (confirmacao) {
+                //window.location.href = `/deletar-personagem?nome=${nome}`;
+            fetch(`/deletar-personagem?nome=${nome}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Personagem deletado com sucesso!');
+                    location.reload();
+                } else {
+                    console.error('Erro ao deletar personagem:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao deletar personagem:', error);
+            });
+        }
+        }
+        
+    </script>
+</body>
+</html>
+

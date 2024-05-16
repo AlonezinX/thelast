@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Lion</title>
+    <style>
+        /* Reset de estilos */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estilos CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: #000;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #ffd700;
+        }
+
+        .menu-toggle {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #ffd700;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffd700;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        section {
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        section h2 {
+            color: #333;
+            background-color: #ffd700;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        section p {
+            font-size: 1.0em;
+            line-height: 1.6;
+        }
+
+        .volume {
+            /* Estilos para o bloco de cada volume */
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            width: 350px; /* Define a largura do card */
+            margin: 0 auto 20px; 
+        }
+
+        .volume h3 {
+            /* Estilos para o título do volume */
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .volume img {
+            /* Estilos para a imagem de capa do volume */
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, border 0.3s ease;
+        }
+
+        .volume img:hover {
+            /* Efeito de zoom na imagem ao passar o mouse */
+            transform: scale(1.05);
+            border: 2px solid #ffd700;
+        }
+
+        .elenco {
+            /* Estilos para a lista de personagens do volume */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .personagem {
+            /* Estilos para cada personagem na lista */
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .personagem img {
+            /* Estilos para as imagens dos personagens */
+            max-width: 150px;
+            max-height: 150px;
+            width: auto;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .personagem img:hover {
+            /* Efeito de zoom nas imagens dos personagens ao passar o mouse */
+            transform: scale(1.05);
+            border: 4px solid #ffd700;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card img {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .card-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .card-overlay .card {
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Estilos para o Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.8em;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        footer .creator {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .character-name {
+            font-size: 1em;
+         }
+
+        .character-description {
+            font-size: 1em; 
+          }
+          
+        .drawer {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    transition: left 0.3s ease;
+}
+.drawer.open {
+    left: 0;
+}
+
+
+
+
+    </style>
+</head>
+<body>
+   <header>
+    <div class="container">
+        <h1>The Last Lion</h1>
+        <button class="menu-toggle" onclick="toggleDrawer()">&#9776;</button>
+    </div>
+</header>
+<nav class="drawer">
+    <ul>
+        <li><a href="#" onclick="showAbout()">Sobre</a></li>
+        <li><a href="#" onclick="showVolumes()">Volumes</a></li>
+        <li><a href="#" onclick="showCast()">Elenco</a></li>
+        <li><a href="#" onclick="showContact()">Contato</a></li>
+    </ul>
+</nav>
+
+
+        </div>
+    </header>
+    <section id="about">
+        <div class="container">
+            <h2>Sobre o Mangá</h2>
+            <p>Em um mundo onde as maldições animalistas ameaçam a harmonia, Daisuke, um jovem com o poder de um leão, anseia por se tornar um samurai lendário. Com sua amiga Yuki, cujo poder de gato complementa o dele, e seu mentor, Suzaku, um mestre samurai respeitado, Daisuke parte em uma jornada épica para proteger o mundo da escuridão que se aproxima. Enfrentando desafios perigosos e inimigos formidáveis, Daisuke descobre que sua verdadeira força reside não apenas em seus poderes, mas também nos laços de amizade e lealdade que compartilha com aqueles ao seu redor. Juntos, eles enfrentarão o destino e desafiarão as sombras que ameaçam consumir o mundo que tanto amam.</p>
+        </div>
+    </section>
+    <section id="volumes">
+        <div class="container">
+            <h2>Volumes</h2>
+            <!-- Conteúdo dos volumes será inserido aqui dinamicamente -->
+        </div>
+    </section>
+    <div class="card-overlay" onclick="closeCard()">
+        <div class="card">
+            <button class="close-button">&times;</button>
+            <img src="https://via.placeholder.com/400" alt="Personagem" id="character-image">
+            <p class="character-name">Nome do Personagem</p>
+            <p class="character-description">Descrição do Personagem...</p>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>© 2024 <span class="creator">Agneto Wilian</span>, criador do mangá The Last Lion. Site criado por <a href="#">Daniel Silva</a>.</p>
+        </div>
+    </footer>
+    <script>
+        // Código JavaScript
+        function toggleDrawer() {
+    const drawer = document.querySelector('.drawer');
+    drawer.classList.toggle('open');
+}
+
+
+        function zoomImage(img) {
+            img.style.transition = 'transform 0.3s ease';
+            img.style.transform = 'scale(1.1)';
+            img.addEventListener('transitionend', () => {
+                img.style.transform = 'scale(1)';
+            }, { once: true });
+        }
+
+        function showCharacter(character) {
+    const characterImage = character.querySelector('img').src;
+    const characterName = character.querySelector('h3').textContent;
+
+    const characterDescription = document.createElement('p');
+    characterDescription.textContent = "descrição: " + character.dataset.descricao;
+
+    const cardOverlay = document.querySelector('.card-overlay');
+    const card = cardOverlay.querySelector('.card');
+    card.innerHTML = '';
+
+    const characterImageElement = document.createElement('img');
+    characterImageElement.src = characterImage;
+    const characterNameElement = document.createElement('h3');
+    characterImageElement.style.width = '130px'; 
+    characterImageElement.style.height = '160px';
+    characterNameElement.textContent = "personagem: " + characterName;
+
+    card.appendChild(characterImageElement);
+    card.appendChild(characterNameElement);
+    card.appendChild(characterDescription);
+
+    cardOverlay.classList.add('visible');
+}
+
+
+        function closeCard() {
+            const cardOverlay = document.querySelector('.card-overlay');
+            cardOverlay.classList.remove('visible');
+        }
+
+    function atualizarListaPersonagens() {
+        fetch('/listar-personagens') // Rota para obter a lista de personagens atualizada
+            .then(response => response.json())
+            .then(data => {
+                const elenco = document.getElementById('elenco');
+                elenco.innerHTML = ''; // Limpa o conteúdo atual da lista de personagens
+
+                data.forEach(personagem => {
+                    const card = document.createElement('div');
+                    card.classList.add('personagem');
+                    card.innerHTML = `
+                    <div class="personagem" onclick="showCharacter(this)" data-descricao="${personagem.descricao}">
+                        <img src="${personagem.imagem}" alt="${personagem.nome}" onclick="showCharacter(this)">
+                        <h3>${personagem.nome}</h3>`;
+                    elenco.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao obter dados dos personagens:', error);
+            });
+    }
+    
+            function atualizarVolumes() {
+            fetch('/listar-volumes') // Rota para obter a lista de volumes atualizada
+                .then(response => response.json())
+                .then(data => {
+                    const volumesContainer = document.getElementById('volumes');
+                    volumesContainer.innerHTML = ''; // Limpa o conteúdo atual da seção de volumes
+
+                    data.forEach(volume => {
+                        const volumeElement = document.createElement('div');
+                        volumeElement.classList.add('volume');
+                        volumeElement.innerHTML = `
+                            <h3>${volume.titulo}</h3>
+                            <img src="${volume.imagem}" alt="Capa do Volume ${volume.numero}">
+                            <h3>Elenco</h3>
+                            <div class="elenco">
+                                ${volume.elenco.map(personagem => `
+                                    <div class="personagem" onclick="showCharacter(this)" data-descricao="${personagem.descricao}">
+                                        <img src="${personagem.imagem}" alt="${personagem.nome}" onclick="showCharacter(this)">
+                                        <h3>${personagem.nome}</h3>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        volumesContainer.appendChild(volumeElement);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao obter dados dos volumes:', error);
+                });
+        }
+    
+    window.onload = function() {
+        atualizarListaPersonagens();
+        atualizarVolumes();
+    };        
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Personagem - The Last Lion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #ffd700;
+            border: none;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #f5c400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Adicionar Personagem</h1>
+        <form id="adicionarPersonagemForm" action="/adicionar-personagem" method="GET">
+            <label for="nome">Nome do Personagem:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="descricao">Descrição do Personagem:</label>
+            <textarea id="descricao" name="descricao" rows="4" required></textarea>
+
+            <label for="imagem">Imagem do Personagem (URL):</label>
+            <input type="text" id="imagem" name="imagem" required>
+
+            <label for="numero">Volume:</label>
+            <select id="numero" name="numero"></select>
+
+            <button type="submit">Adicionar Personagem</button>
+        </form>
+    </div>
+
+    <script>
+        // Carregar os volumes do arquivo JSON e preencher o campo de seleção
+        fetch('/listar-volumes')
+            .then(response => response.json())
+            .then(data => {
+                const selectVolume = document.getElementById('numero');
+                data.forEach(volume => {
+                    const option = document.createElement('option');
+                    option.value = volume.numero;
+                    option.textContent = `Volume ${volume.numero}`;
+                    selectVolume.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar os volumes:', error);
+            });
+    </script>
+</body>
+</html>

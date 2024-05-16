@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login e Cadastro</title>
+     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 10px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #signup-card {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-card" class="card">
+        <h2>Login</h2>
+        <input type="text" id="login-username" placeholder="Nome de usuário">
+        <input type="password" id="login-password" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
+        <p>Ainda não tem uma conta? <a href="#" onclick="toggleForm()">Cadastre-se</a></p>
+    </div>
+
+    <div id="signup-card" class="card">
+        <h2>Cadastro</h2>
+        <input type="text" id="signup-username" placeholder="Nome de usuário">
+        <input type="password" id="signup-password" placeholder="Senha">
+        <input type="file" id="profile-picture" accept="image/*">
+        <button onclick="signup()">Cadastrar</button>
+    </div>
+
+    <script>
+    let results = [];
+console.log(results)
+    
+    // Função para alternar entre os formulários de login e cadastro
+    function toggleForm() {
+        document.getElementById("login-card").style.display = "none";
+        document.getElementById("signup-card").style.display = "block";
+    }
+
+    // Função para fazer o login
+    function login() {
+    var username = document.getElementById("login-username").value;
+    var password = document.getElementById("login-password").value;
+
+    // Faz a requisição AJAX para obter os usuários cadastrados
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/users", true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // Se a requisição for bem-sucedida, verifica se o usuário e a senha correspondem a algum usuário cadastrado
+            var users = JSON.parse(xhr.responseText);
+            var user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                alert("Login bem-sucedido!");
+                // Redirecionar para a página inicial
+                window.location.href = "home";
+            } else {
+                alert("Usuário ou senha incorretos.");
+            }
+        } else {
+            console.error("Erro ao carregar os usuários:", xhr.statusText);
+        }
+    };
+    xhr.send();
+}
+
+    // Função para fazer o cadastro
+    function signup() {
+    var username = document.getElementById("signup-username").value;
+    var password = document.getElementById("signup-password").value;
+
+    var currentDate = new Date();
+    var creationDate = currentDate.toLocaleDateString();
+    var creationTime = currentDate.toLocaleTimeString();
+
+    var newUser = { 
+        username: username, 
+        password: password,
+        creationDate: creationDate,
+        creationTime: creationTime
+    };
+
+    // Montar a URL com os dados do novo usuário
+    var url = "/signup?" +
+              "username=" + encodeURIComponent(newUser.username) +
+              "&password=" + encodeURIComponent(newUser.password) +
+              "&creationDate=" + encodeURIComponent(newUser.creationDate) +
+              "&creationTime=" + encodeURIComponent(newUser.creationTime);
+
+    // Redirecionar para o servidor usando a URL
+    window.location.href = url;
+}
+
+    </script>
+</body>
+</html>
+
