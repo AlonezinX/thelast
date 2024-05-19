@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cookieParser());
 
-const port = 3000;
+const port = 10000;
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
